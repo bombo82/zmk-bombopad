@@ -4,5 +4,8 @@ name: BomboPad Macropad
 type: shield
 url: https://google.it
 requires: [pro_micro]
+exposes: [i2c_oled]
 features:
   - keys
+  - encoders
+  - display
