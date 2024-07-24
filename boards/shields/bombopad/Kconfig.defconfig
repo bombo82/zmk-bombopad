@@ -1,6 +1,6 @@
 if SHIELD_BOMBOPAD
 
 config ZMK_KEYBOARD_NAME
-    default "Prova"
+    default "BomboPad"
 
 endif
