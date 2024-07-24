@@ -1,0 +1,8 @@
+file_format: "1"
+id: bombopad
+name: BomboPad Macropad
+type: shield
+url: https://google.it
+requires: [pro_micro]
+features:
+  - keys
