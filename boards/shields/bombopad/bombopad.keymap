@@ -3,31 +3,229 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
+/*
+ * keycode equivalence between GNU/Linux and macOS
+ * |-----------------------------------|
+ * |  Linux |  macOS | fun()  |
+ * |--------|--------|--------|
+ * |  LALT  |  LALT  |   LA   |
+ * |--------|--------|--------|
+ * |  RALT  |  RALT  |   RA   |
+ * |--------|--------|--------|
+ * |  LGUI  |  LCMD  |   LG   |
+ * |--------|--------|--------|
+ * |  RGUI  |  RCMD  |   RG   |
+ * |--------------------------|
+ */
+
+#define BASE  0
+#define XPP   1
+#define DPP   2
+#define KiCad 3
+#define NUM   4
+#define OBS   5
+#define MGMT  6
+
 / {
-    keymap {
+
+    behaviors {
+        cycle_layer: behavior_mo_to {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&to>;
+        };
+    };
+
+    macros {
+        mounse_ca_t: mounse_click_animation_and_track {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp LG(ASTERISK)>
+                , <&macro_press &kp LGUI>
+                , <&macro_press &kp LCTRL>
+                , <&macro_release &kp LCTRL>
+                , <&macro_release &kp LGUI>
+                , <&macro_tap &kp LG(ASTERISK)>
+                ;
+        };
+    };
+
+        keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
-            display-name = " NUM";
+        base_layer {
+            display-name = "Default";
 
             bindings = <
-    &kp N7 &kp N8 &kp N9 &out OUT_TOG
-    &kp N4 &kp N5 &kp N6 &none
-    &kp N1 &kp N2 &kp N3 &tog 1
+    &kp ESC             &kp F11             &kp PG_UP           &kp K_MUTE
+    &kp LC(F5)          &cycle_layer 5 1    &kp PG_DN           &kp LG(K_MUTE)
+    &kp LG(LC(N))       &kp LG(LS(F11))     &kp LG(LS(F12))     &cycle_layer 5 1
             >;
             
             sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
         };
     
+
+        xpp_layer {
+            display-name = " XPP";
+
+            bindings = <
+    &kp LC(LS(G))       &kp LC(LS(R))       &kp DEL             &trans
+    &kp LC(LS(P))       &cycle_layer 5 2    &kp LC(LS(E))       &trans
+    &kp LC(Z)           &kp LC(Y)           &kp LC(LS(T))       &cycle_layer 5 2
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        dpp_layer {
+            display-name = " DPP";
+
+            bindings = <
+    &kp LS(LG(RIGHT))   &kp LG(LEFT)        &kp LG(RIGHT)       &trans
+    &kp LG(LA(Z))       &cycle_layer 5 3    &kp LG(LC(Z))       &trans
+    &kp 1               &kp LG(Z)           &kp LG(LS(Z))       &cycle_layer 5 3
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        kicad_layer {
+            display-name = "KiCad";
+
+            bindings = <
+    &kp GRAVE           &kp Q               &kp P               &trans
+    &kp L               &cycle_layer 5 4    &kp W               &trans
+    &kp LSHIFT          &kp LC(Z)           &kp LC(Y)           &cycle_layer 5 4
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        numeric_layer {
+            display-name = " NUM";
+
+            bindings = <
+    &kp N7              &kp N8              &kp N9              &kp 0
+    &kp N4              &cycle_layer 5 5    &kp N6              &kp ENTER
+    &kp N1              &kp N2              &kp N3              &cycle_layer 5 5
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
     
+        obs_layer {
+            display-name = " OBS";
+
+            bindings = <
+    &kp N7              &kp N8              &kp N9              &trans
+    &kp N4              &cycle_layer 0 6    &kp N6              &trans
+    &kp N1              &kp N2              &kp N3              &cycle_layer 0 6
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
         management_layer {
             display-name = "MGMT";
 
             bindings = <
-    &sys_reset      &bootloader     &none           &trans
-    &bt BT_SEL 3    &bt BT_SEL 4    &bt BT_CLR      &trans
-    &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &trans
+    &sys_reset          &bootloader         &none               &trans
+    &bt BT_SEL 3        &cycle_layer 5 0    &bt BT_CLR          &trans
+    &bt BT_SEL 0        &bt BT_SEL 1        &bt BT_SEL 2        &cycle_layer 5 0
             >;
         };
+   
+/*
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            display-name = "Default";
+
+            bindings = <
+    &kp ESC         &kp F11         &kp PG_UP       &kp K_MUTE
+    &kp LC(F5)      &mounse_ca_t    &kp PG_DN       &kp LG(K_MUTE)
+    &kp LG(LC(N))   &kp LG(LS(F11)) &kp LG(LS(F12)) &cycle_layer 5 1
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+    
+
+        xpp_layer {
+            display-name = " XPP";
+
+            bindings = <
+    &kp LC(LS(G))       &kp LC(LS(R))       &kp DEL             &trans
+    &kp LC(LS(P))       &kp LC(LS(H))       &kp LC(LS(E))       &trans
+    &kp LC(Z)           &kp LC(Y)           &kp LC(LS(T))       &cycle_layer 5 2
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        dpp_layer {
+            display-name = " DPP";
+
+            bindings = <
+    &kp LS(LG(RIGHT))   &kp LG(LEFT)        &kp LG(RIGHT)       &trans
+    &kp LG(LA(Z))       &kp LG(S)           &kp LG(LC(Z))       &trans
+    &kp 1               &kp LG(Z)           &kp LG(LS(Z))       &cycle_layer 5 3
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        kicad_layer {
+            display-name = "KiCad";
+
+            bindings = <
+    &kp GRAVE           &kp Q               &kp P               &trans
+    &kp L               &kp A               &kp W               &trans
+    &kp LSHIFT          &kp LC(Z)           &kp LC(Y)           &cycle_layer 5 4
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        numeric_layer {
+            display-name = " NUM";
+
+            bindings = <
+    &kp N7              &kp N8              &kp N9              &kp 0
+    &kp N4              &kp N5              &kp N6              &kp ENTER
+    &kp N1              &kp N2              &kp N3              &cycle_layer 5 5
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+    
+        obs_layer {
+            display-name = " OBS";
+
+            bindings = <
+    &none               &none               &none               &trans
+    &none               &none               &none               &trans
+    &none               &none               &none               &cycle_layer 0 6
+            >;
+            
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+        };
+
+        management_layer {
+            display-name = "MGMT";
+
+            bindings = <
+    &sys_reset          &bootloader         &none               &trans
+    &bt BT_SEL 3        &bt BT_SEL 4        &bt BT_CLR          &trans
+    &bt BT_SEL 0        &bt BT_SEL 1        &bt BT_SEL 2        &cycle_layer 5 0
+            >;
+        };
+
+*/
     };
 };
