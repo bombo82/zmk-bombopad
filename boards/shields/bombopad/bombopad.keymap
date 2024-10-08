@@ -37,6 +37,15 @@
             tapping-term-ms = <200>;
             bindings = <&mo>, <&to>;
         };
+
+        ht: hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&kp>, <&kp>;
+        };
     };
 
     keymap {
@@ -46,12 +55,12 @@
             display-name = "Default";
 
             bindings = <
-    &kp ESC             &kp F11             &kp PG_UP           &kp K_MUTE
-    &kp 4               &kp LC(F5)          &kp PG_DN           &kp LG(K_MUTE)
-    &kp LCTRL           &kp LG(LSHFT)       &kp 3               &cycle_layer 7 1
+    &kp ESC                 &kp F11                 &kp PG_UP               &kp K_MUTE
+    &ht LG(LCTRL) LG(STAR)  &kp LC(F5)              &kp PG_DN               &kp LG(K_MUTE)
+    &kp LCTRL               &kp LG(LSHFT)           &ht LA(UNDER) LA(PLUS)  &cycle_layer 7 1
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
     
 
@@ -59,82 +68,84 @@
             display-name = " XPP";
 
             bindings = <
-    &kp LC(LS(G))       &kp LC(LS(R))       &kp DEL             &trans
-    &kp LC(LS(P))       &kp LC(LS(P))       &kp LC(LS(E))       &trans
-    &kp LC(LS(T))       &kp LC(Y)           &kp LC(Z)           &cycle_layer 7 2
+    &kp LC(LS(G))           &kp LC(LS(R))           &kp DEL                 &trans
+    &kp LC(LS(P))           &kp LC(LS(H))           &kp LC(LS(E))           &trans
+    &kp LC(LS(T))           &kp LC(Y)               &kp LC(Z)               &cycle_layer 7 2
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         dpp_layer {
             display-name = " DPP";
 
             bindings = <
-    &kp LG(LS(RIGHT))   &kp LG(LEFT)        &kp LG(RIGHT)       &trans
-    &kp LG(LA(Z))       &kp LG(S)           &kp LG(Z)           &trans
-    &kp LG(LC(Z))       &kp 2               &kp LG(LS(Z))       &cycle_layer 7 3
+    &kp LG(LS(RIGHT))       &kp LG(LEFT)            &kp LG(RIGHT)           &trans
+    &kp LG(LA(Z))           &kp LG(S)               &kp LG(Z)               &trans
+    &kp LG(LC(Z))           &none                   &kp LG(LS(Z))           &cycle_layer 7 3
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         sch_layer {
             display-name = "SCH";
 
             bindings = <
-    &kp GRAVE           &kp Q               &kp P               &trans
-    &kp L               &kp A               &kp W               &trans
-    &kp LSHIFT          &kp LC(Z)           &kp LC(Y)           &cycle_layer 7 4
+    &kp GRAVE               &kp Q                   &kp P                   &trans
+    &kp L                   &kp A                   &kp W                   &trans
+    &kp LSHIFT              &kp LC(Z)               &kp LC(Y)               &cycle_layer 7 4
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         pcb_layer {
             display-name = "PCB";
 
             bindings = <
-    &trans              &trans              &trans              &trans
-    &trans              &trans              &trans              &trans
-    &trans              &trans              &trans              &cycle_layer 7 5
+    &kp X                   &kp GRAVE               &kp LS(LSHFT)           &trans
+    &kp LC(LS(K))           &kp LC(LS(V))           &none                   &trans
+    &kp E                   &kp LS(P)               &kp LS(M)               &cycle_layer 7 5
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         numeric_layer {
             display-name = " NUM";
 
             bindings = <
-    &kp N7              &kp N8              &kp N9              &kp 0
-    &kp N4              &kp N5              &kp N6              &kp ENTER
-    &kp N1              &kp N2              &kp N3              &cycle_layer 7 6
+    &kp N7                  &kp N8                  &kp N9                  &kp 0
+    &kp N4                  &kp N5                  &kp N6                  &kp ENTER
+    &kp N1                  &kp N2                  &kp N3                  &cycle_layer 7 6
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         management_layer {
             display-name = "MGMT";
 
             bindings = <
-    &sys_reset          &bootloader         &none               &trans
-    &out OUT_USB        &out OUT_BLE        &out OUT_TOG        &trans
-    &bt BT_SEL 0        &bt BT_SEL 1        &bt BT_CLR          &cycle_layer 7 7
+    &sys_reset              &bootloader             &none                   &trans
+    &out OUT_USB            &out OUT_BLE            &out OUT_TOG            &trans
+    &bt BT_SEL 0            &bt BT_SEL 1            &bt BT_CLR              &cycle_layer 7 7
             >;
+
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
 
         obs_layer {
             display-name = " OBS";
 
             bindings = <
-    &kp LG(LC(LA(7)))   &kp LG(LC(LA(8)))   &kp LG(LC(LA(9)))   &trans
-    &kp LG(LC(LA(4)))   &kp LG(LC(LA(5)))   &kp LG(LC(LA(6)))   &trans
-    &kp LG(LC(LA(1)))   &kp LG(LC(LA(2)))   &kp LG(LC(LA(3)))   &cycle_layer 0 7
+    &kp LG(LC(LA(7)))       &kp LG(LC(LA(8)))       &kp LG(LC(LA(9)))       &trans
+    &kp LG(LC(LA(4)))       &kp LG(LC(LA(5)))       &kp LG(LC(LA(6)))       &trans
+    &kp LG(LC(LA(1)))       &kp LG(LC(LA(2)))       &kp LG(LC(LA(3)))       &cycle_layer 7 0
             >;
             
-            sensor-bindings = <&inc_dec_kp LEFT RIGHT &inc_dec_kp DOWN UP>;
+            sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
         };
     };
 };
