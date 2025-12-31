@@ -2,11 +2,9 @@ file_format: "1"
 id: bombopad
 name: BomboPad Macropad
 type: shield
-url: https://google.it
+url: https://github.com/bombo82/zmk-bombopad
 requires: [pro_micro]
-exposes: [i2c_oled]
 features:
   - keys
   - encoders
-  - display
   - bluetooth
