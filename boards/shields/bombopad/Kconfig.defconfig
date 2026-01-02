@@ -3,4 +3,22 @@ if SHIELD_BOMBOPAD
 config ZMK_KEYBOARD_NAME
     default "BomboPad"
 
+if ZMK_DISPLAY
+config LV_FONT_MONTSERRAT_14
+    bool
+    default y
+config LV_FONT_MONTSERRAT_16
+    bool
+    default y
+config LV_FONT_MONTSERRAT_18
+    bool
+    default y
+config LV_USE_CANVAS
+    bool
+    default y
+config LV_USE_IMAGE
+    bool
+    default y
+endif
+
 endif
