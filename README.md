@@ -23,7 +23,13 @@ For hardware design files, electrical schematics, and PCB layouts, please refer 
 
 ## Build Instructions
 
-TBD
+To build the ZMK firmware, run the following command from your ZMK `app` directory:
+
+```bash
+west build -p -b nice_nano_v2 -- -DSHIELD="nice_view_adapter nice_view bombopad" -DZMK_EXTRA_MODULES="/path/to/zmk-bombopad"
+```
+
+Replace `/path/to/zmk-bombopad` with the absolute path to this repository.
 
 ## Keymap Information
 
