@@ -63,5 +63,5 @@ void canvas_draw_arc(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, lv_coord_t r,
                      int32_t start_angle, int32_t end_angle, lv_draw_arc_dsc_t *draw_dsc);
 void canvas_draw_text(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, lv_coord_t max_w,
                       lv_draw_label_dsc_t *draw_dsc, const char *txt);
-void canvas_draw_img(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, const lv_img_dsc_t *src,
-                     lv_draw_img_dsc_t *draw_dsc);
+void canvas_draw_img(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, const lv_image_dsc_t *src,
+                     lv_draw_image_dsc_t *draw_dsc);

@@ -110,8 +110,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_BALLOON u
         0x55, 0x55, 0x77, 0xff, 0xff, 0xff, 0xff, 0xfd, 0xf0,
 };
 
-const lv_img_dsc_t balloon = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
+const lv_image_dsc_t balloon = {
+    .header.cf = LV_COLOR_FORMAT_I1,
 
     .header.w = 140,
     .header.h = 68,
@@ -217,8 +217,8 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_MOUNTAIN 
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf0,
 };
 
-const lv_img_dsc_t mountain = {
-    .header.cf = LV_IMG_CF_INDEXED_1BIT,
+const lv_image_dsc_t mountain = {
+    .header.cf = LV_COLOR_FORMAT_I1,
 
     .header.w = 140,
     .header.h = 68,
