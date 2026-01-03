@@ -53,8 +53,6 @@ static void draw_top(lv_obj_t *widget, const struct status_state *state) {
     lv_draw_line_dsc_t line_dsc;
     init_line_dsc(&line_dsc, LVGL_FOREGROUND, 1);
 
-    // Fill background
-    lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
     // Draw battery
     draw_battery(canvas, state);
 
@@ -100,9 +98,6 @@ static void draw_middle(lv_obj_t *widget, const struct status_state *state) {
     lv_draw_label_dsc_t label_dsc_black;
     init_label_dsc(&label_dsc_black, LVGL_BACKGROUND, &lv_font_montserrat_18, LV_TEXT_ALIGN_CENTER);
 
-    // Fill background
-    lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
-
     // Draw circles
     int circle_offsets[NICEVIEW_PROFILE_COUNT][2] = {
         {13, 13}, {55, 13}, {34, 34}, {13, 55}, {55, 55},
@@ -145,9 +140,6 @@ static void draw_bottom(lv_obj_t *widget, const struct status_state *state) {
     init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
     lv_draw_label_dsc_t label_dsc;
     init_label_dsc(&label_dsc, LVGL_FOREGROUND, &lv_font_montserrat_14, LV_TEXT_ALIGN_CENTER);
-
-    // Fill background
-    lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
 
     // Draw layer
     if (state->layer_label == NULL || strlen(state->layer_label) == 0) {
@@ -273,12 +265,15 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     lv_obj_t *top = lv_canvas_create(widget->obj);
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE / 2, CANVAS_COLOR_FORMAT);
+    lv_canvas_fill_bg(top, LVGL_BACKGROUND, LV_OPA_COVER);
     lv_obj_t *middle = lv_canvas_create(widget->obj);
     lv_obj_align(middle, LV_ALIGN_RIGHT_MID, 0, 0);
     lv_canvas_set_buffer(middle, widget->cbuf2, CANVAS_SIZE, CANVAS_SIZE, CANVAS_COLOR_FORMAT);
+    lv_canvas_fill_bg(middle, LVGL_BACKGROUND, LV_OPA_COVER);
     lv_obj_t *bottom = lv_canvas_create(widget->obj);
     lv_obj_align(bottom, LV_ALIGN_BOTTOM_LEFT, 0, 0);
     lv_canvas_set_buffer(bottom, widget->cbuf3, CANVAS_SIZE, CANVAS_SIZE / 2, CANVAS_COLOR_FORMAT);
+    lv_canvas_fill_bg(bottom, LVGL_BACKGROUND, LV_OPA_COVER);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
