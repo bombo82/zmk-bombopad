@@ -21,16 +21,6 @@ The current firmware version supports the following hardware features:
 For hardware design files, electrical schematics, and PCB layouts, please refer to the 
 **[main BomboPad repository](https://github.com/bombo82/bombopad)**.
 
-## Build Instructions
-
-To build the ZMK firmware, run the following command from your ZMK `app` directory:
-
-```bash
-west build -p -b nice_nano -- -DSHIELD="nice_view_adapter nice_view bombopad" -DZMK_EXTRA_MODULES="/path/to/zmk-bombopad"
-```
-
-Replace `/path/to/zmk-bombopad` with the absolute path to this repository.
-
 ## Keymap Information
 
 The ZMK keymap is located at `boards/shields/bombopad/bombopad.keymap`.
@@ -54,6 +44,45 @@ The default keymap defines the following layers:
 
 - `NUM`: Numeric keypad layer (Default).
 - `MGMT`: Management layer for Bluetooth profile selection, output toggling, and reset/bootloader functions.
+
+## Display & Nice!View Widget
+
+The BomboPad includes a custom status widget for the Nice!View display, which provides at-a-glance information about the device state.
+
+### Custom Widget Layout
+
+The custom widget is enabled by default (`CONFIG_NICE_VIEW_WIDGET_STATUS=n`) and replaces the standard ZMK status screen. It is organized into three main sections:
+
+| Section               | Position    | Content                                                  |
+|:----------------------|:------------|:---------------------------------------------------------|
+| **Battery & Output**  | Left Top    | Battery icon/percentage and active output (USB/BLE).     |
+| **Layer Status**      | Left Bottom | Name of the currently active layer (e.g., `NUM`, `MGMT`). |
+| **Bluetooth Profiles**| Right       | Status of the 5 Bluetooth profiles (numbered circles).    |
+
+### Status Indicators
+
+- **Output**: 
+  - `USB`: Connected via USB.
+  - `WIFI`: Connected to a Bluetooth host.
+  - `CLOSE`: Bonded but disconnected.
+  - `SETTINGS`: Discoverable/pairing mode.
+- **Bluetooth Profiles**: 
+  - Numbered circles represent the available BLE profiles.
+  - A solid circle indicates the currently selected profile.
+  - A dashed circle indicates a bonded profile.
+- **Layers**: 
+  - Displays the `display-name` defined in the keymap.
+  - Default layers: `NUM` (numeric keypad) and `MGMT` (management).
+
+### Customization
+
+You can revert to the standard ZMK status widget or customize the behavior via `bombopad.conf`:
+
+- **To use the standard ZMK widget**:
+  ```kconfig
+  CONFIG_NICE_VIEW_WIDGET_STATUS=y
+  ```
+- **Fonts**: The widget uses Montserrat fonts (14, 16, 18) which are enabled in `Kconfig.defconfig`. Disabling these fonts will cause the widget to render incorrectly or fail to compile.
 
 ## Help & Contributions
 
