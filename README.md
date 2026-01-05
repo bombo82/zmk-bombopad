@@ -11,32 +11,33 @@ like the Nice!Nano.
 The current firmware version supports the following hardware features:
 
 - **12 keys**: Matrix layout 3x4.
-- **Dual Rotary Encoders**: Supports EC11 or EVQWGD001 encoders.
+- **Dual Rotary Encoders**: Support EC11 or EVQWGD001 encoders.
 - **Display Support**: Nice!View.
-- **Microcontroller**: Nice!Nano v2 or other compatible wireless controllers e.g. SuperMini NRF52840.
+- **Microcontroller**: Nice!Nano v2 or other compatible wireless controllers, e.g. SuperMini NRF52840.
 - **Wireless**: Bluetooth LE support via ZMK.
 
 ## Hardware Availability
 
-For hardware design files, electrical schematics, and PCB layouts, please refer to the 
+For hardware design files, electrical schematics, and PCB layouts, please refer to the
 **[main BomboPad repository](https://github.com/bombo82/bombopad)**.
 
 ## Keymap Information
 
 The ZMK keymap is located at `boards/shields/bombopad/bombopad.keymap`.
 
-### Custom Behaviors
+### Customised Behaviors
 
-The keymap includes custom behaviors to enhance the macropad's functionality:
+The keymap includes customised behaviours to enhance the macropad's functionality:
 
 1. **`cycle_layer`**:
-    - A hold-tap behavior that combines `mo` (momentary) and `to` (toggle).
-    - **Hold**: Momentarily activates a layer (usually the management layer).
-    - **Tap**: Toggles to a specific layer.
-    - Used to navigate through the different functional layers of the macropad.
+    - A hold-tap behaviour that combines `mo` (momentary) and `to` (toggle).
+    - **Hold**: Momentarily switches to the `MGMT` layer.
+    - **Tap**: Toggles between layers (e.g., `NUM` to `MGMT` and vice-versa).
+    - Defined with a `tapping-term-ms` of 200ms.
 
 2. **`ht` (Hold-Tap)**:
-    - A standard hold-tap behavior used for multi-function keys (e.g., Command+Key on hold, simple Key on tap).
+    - A standard hold-tap behaviour used for multi-function keys (e.g., Command+Key on hold, simple Key on tap).
+    - `tapping-term-ms`: 200ms, `quick-tap-ms`: 200ms.
 
 ### Layers
 
@@ -45,44 +46,144 @@ The default keymap defines the following layers:
 - `NUM`: Numeric keypad layer (Default).
 - `MGMT`: Management layer for Bluetooth profile selection, output toggling, and reset/bootloader functions.
 
+For further details on layer configuration and encoder behaviours, refer to the [Encoders](#encoders)
+and [Keymap & Bluetooth](#keymap--bluetooth) sections below.
+
 ## Display & Nice!View Widget
 
-The BomboPad includes a custom status widget for the Nice!View display, which provides at-a-glance information about the device state.
+The BomboPad includes a customised status widget for the Nice!View display, which provides at-a-glance information about
+the device state.
 
-### Custom Widget Layout
+### Customised Widget Layout
 
-The custom widget is enabled by default (`CONFIG_NICE_VIEW_WIDGET_STATUS=n`) and replaces the standard ZMK status screen. It is organized into three main sections:
+The customised widget is enabled by default (`CONFIG_NICE_VIEW_WIDGET_STATUS=n`) and replaces the standard ZMK status
+screen. It is organised into three main sections:
 
-| Section               | Position    | Content                                                  |
-|:----------------------|:------------|:---------------------------------------------------------|
-| **Battery & Output**  | Left Top    | Battery icon/percentage and active output (USB/BLE).     |
-| **Layer Status**      | Left Bottom | Name of the currently active layer (e.g., `NUM`, `MGMT`). |
-| **Bluetooth Profiles**| Right       | Status of the 5 Bluetooth profiles (numbered circles).    |
+| Section                | Position    | Content                                                   |
+|:-----------------------|:------------|:----------------------------------------------------------|
+| **Battery & Output**   | Left Top    | Battery icon/percentage and active output (USB/BLE).      |
+| **Layer Status**       | Left Bottom | Name of the currently active layer (e.g., `NUM`, `MGMT`). |
+| **Bluetooth Profiles** | Right       | Status of the 5 Bluetooth profiles (numbered circles).    |
 
 ### Status Indicators
 
-- **Output**: 
-  - `USB`: Connected via USB.
-  - `WIFI`: Connected to a Bluetooth host.
-  - `CLOSE`: Bonded but disconnected.
-  - `SETTINGS`: Discoverable/pairing mode.
-- **Bluetooth Profiles**: 
-  - Numbered circles represent the available BLE profiles.
-  - A solid circle indicates the currently selected profile.
-  - A dashed circle indicates a bonded profile.
-- **Layers**: 
-  - Displays the `display-name` defined in the keymap.
-  - Default layers: `NUM` (numeric keypad) and `MGMT` (management).
+- **Output**:
+    - `USB`: Connected via USB.
+    - `WIFI`: Connected to a Bluetooth host.
+    - `CLOSE`: Bonded but disconnected.
+    - `SETTINGS`: Discoverable/pairing mode.
+- **Bluetooth Profiles**:
+    - Numbered circles represent the available BLE profiles.
+    - A solid circle indicates the currently selected profile.
+    - A dashed circle indicates a bonded profile.
+- **Layers**:
+    - Displays the `display-name` defined in the keymap.
+    - Default layers: `NUM` (numeric keypad) and `MGMT` (management).
 
-### Customization
+### Customisation
 
-You can revert to the standard ZMK status widget or customize the behavior via `bombopad.conf`:
+You can revert to the standard ZMK status widget or customise the behaviour via `bombopad.conf`:
 
 - **To use the standard ZMK widget**:
   ```kconfig
   CONFIG_NICE_VIEW_WIDGET_STATUS=y
   ```
-- **Fonts**: The widget uses Montserrat fonts (14, 16, 18) which are enabled in `Kconfig.defconfig`. Disabling these fonts will cause the widget to render incorrectly or fail to compile.
+- **Fonts**: The widget uses Montserrat fonts (14, 16, 18) which are enabled in `Kconfig.defconfig`. Disabling these
+  fonts will cause the widget to render incorrectly or fail to compile.
+
+## Encoders
+
+The BomboPad features two rotary encoders that can be customised for various tasks like volume control, scrolling, or
+switching layers.
+
+### Calibration
+
+The encoder behaviour is defined by two main parameters in `boards/shields/bombopad/bombopad.overlay`:
+
+- **`steps`**: The number of pulses the encoder hardware sends per full rotation.
+- **`triggers-per-rotation`**: The number of times ZMK should trigger a keypress/action per full rotation.
+
+By default, the BomboPad is configured for encoders with a 4:1 ratio (e.g., 80 steps and 20 triggers):
+
+```devicetree
+encoder0: encoder0 {
+    steps = <80>;
+};
+
+sensors: sensors {
+    triggers-per-rotation = <20>;
+};
+```
+
+#### Common Encoder Settings
+
+If your encoder feels too sensitive (multiple actions per click) or not sensitive enough (skips clicks), adjust these
+values:
+
+| Encoder Model          | Recommended `steps` | Recommended `triggers-per-rotation` |
+|:-----------------------|:--------------------|:------------------------------------|
+| **EC11** (Standard)    | 80                  | 20                                  |
+| **EVQWGD001** (Roller) | 24                  | 24                                  |
+
+### Customising Actions
+
+Encoder actions are defined in the `sensor-bindings` section of each layer in `bombopad.keymap`:
+
+```devicetree
+sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
+```
+
+The first entry corresponds to the left encoder (`encoder0`), and the second to the right encoder (`encoder1`).
+
+## Keymap & Bluetooth
+
+The BomboPad keymap is designed to be intuitive yet powerful, with dedicated layers for numbers and system management.
+
+### Customised Behaviours
+
+- **`cycle_layer`**:
+    - **Hold**: Momentarily switches to the `MGMT` layer.
+    - **Tap**: Toggles between layers (e.g., `NUM` to `MGMT` and vice-versa).
+    - Defined with a `tapping-term-ms` of 200ms.
+- **`ht` (Hold-Tap)**:
+    - Standard hold-tap behaviour used for keys that perform different actions when held versus tapped.
+    - `tapping-term-ms`: 200ms, `quick-tap-ms`: 200ms.
+
+### Layers
+
+#### 1. NUM (Default)
+
+The main layer for numeric entry.
+
+- **Left Encoder**: Volume Up/Down.
+- **Right Encoder**: Command + Volume Up/Down (useful for specific OS shortcuts).
+
+#### 2. MGMT (Management)
+
+Used for system tasks and Bluetooth management.
+
+- **Top Row**: System Reset, Bootloader.
+- **Middle Row**: Output selection (USB, BLE, Toggle).
+- **Bottom Row**: Bluetooth Profile 0, Profile 1, and Bluetooth Clear.
+
+### Bluetooth Management
+
+The BomboPad supports up to 5 Bluetooth profiles (though the default keymap maps 2 for simplicity).
+
+- **Switching Profiles**: Use `BT_SEL 0` or `BT_SEL 1` in the `MGMT` layer.
+- **Clearing Bonds**: `BT_CLR` removes the bonding information for the *currently selected* profile.
+
+> [!WARNING]
+> **Using BT_CLR**: If you use `BT_CLR`, you must also "Forget" or "Remove" the BomboPad from your computer/device's
+> Bluetooth settings before attempting to re-pair.
+
+### Output Selection
+
+You can force the macropad to use a specific connection method:
+
+- `OUT_USB`: Force USB output.
+- `OUT_BLE`: Force Bluetooth output.
+- `OUT_TOG`: Toggle between USB and BLE.
 
 ## Help & Contributions
 
@@ -96,13 +197,13 @@ and [Discussions](https://github.com/bombo82/bombopad/discussions) for any feedb
 
 ## Licenses
 
-Documentation are licensed under GNU Free Documentation License as published by the Free Software Foundation, either
+Documentation is licensed under the GNU Free Documentation License as published by the Free Software Foundation, either
 version 1.3 of the License, or (at your option) any later version.
 
-Source code are licensed under GNU General Public License as published by the Free Software Foundation, either version 3
-of the License, or (at your option) any later version.
+Source code is licensed under the GNU General Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version.
 
-Hardware design and all related things are licensed under CERN Open Hardware Licence as published by the CERN, either
+Hardware design and all related items are licensed under the CERN Open Hardware Licence as published by CERN, either
 version 2 of the Licence, or (at your option) any later version.
 
 ## License Disclaimer
@@ -119,4 +220,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/fdl-1.3.html>
 
 ## Acknowledgements
 
-Special thanks to [Arialdo](https://github.com/arialdomartini) for introducing me to the world of custom mechanical keyboards.
+Special thanks to [Arialdo](https://github.com/arialdomartini) for introducing me to the world of custom mechanical
+keyboards.
