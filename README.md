@@ -14,13 +14,28 @@ The current firmware version supports the following hardware features:
 - **Dual Rotary Encoders**: Support EC11 or EVQWGD001 encoders.
 - **Display Support**: Nice!View.
 - **Microcontroller**: Nice!Nano v2 or other compatible wireless controllers, e.g. SuperMini NRF52840.
-  Note that the shield metadata specifies `requires: [pro_micro]`, which is the standard ZMK mapping for controllers with the Pro Micro footprint, including the Nice!Nano.
+  Note that the shield metadata specifies `requires: [pro_micro]`, which is the standard ZMK mapping for controllers
+  with the Pro Micro footprint, including the Nice!Nano.
 - **Wireless**: Bluetooth LE support via ZMK.
 
 ## Hardware Availability
 
 For hardware design files, electrical schematics, and PCB layouts, please refer to the
 **[main BomboPad repository](https://github.com/bombo82/bombopad)**.
+
+## Build Variants
+
+The firmware is built in two variants to accommodate different hardware configurations. The following table summarises
+the differences:
+
+| Feature           | `bombopad_niceview` (Standard) | `bombopad_nodisplay` (Optimised) |
+|:------------------|:-------------------------------|:---------------------------------|
+| **Display**       | Enabled (Custom Widget)        | Disabled                         |
+| **BLE Profiles**  | 5                              | 2                                |
+| **BT Navigation** | Cycle (`BT_PRV`/`BT_NXT`)      | Direct (`BT_SEL 0/1`)            |
+| **Artifact Name** | `bombopad_niceview`            | `bombopad_nodisplay`             |
+
+Both variants include `BT_CLR` for clearing the current Bluetooth bond.
 
 ## Keymap Information
 
@@ -70,7 +85,7 @@ screen. It is organised into three main sections:
 
 - **Output**:
     - `USB`: Connected via USB.
-    - `WIFI`: Connected to a Bluetooth host.
+    - `BLE`: Connected to a Bluetooth host.
     - `CLOSE`: Bonded but disconnected.
     - `SETTINGS`: Discoverable/pairing mode.
 - **Bluetooth Profiles**:
@@ -91,21 +106,6 @@ You can revert to the standard ZMK status widget or customise the behaviour via 
   ```
 - **Fonts**: The widget uses Montserrat fonts (14, 16, 18) which are enabled in `Kconfig.defconfig`. Disabling these
   fonts will cause the widget to render incorrectly or fail to compile.
-
-### Build Variants
-
-The firmware is built in two variants to accommodate different hardware configurations:
-
-- **`bombopad_niceview`**: The standard build for macropads equipped with a Nice!View display.
-    - **Display**: Enabled with custom status widget.
-    - **Bluetooth**: Supports up to 5 profiles.
-    - **Keymap**: Uses `BT_PRV` and `BT_NXT` to cycle through Bluetooth profiles in the `MGMT` layer.
-- **`bombopad_nodisplay`**: An optimised build for macropads without a display.
-    - **Display**: Disabled to save power and memory.
-    - **Bluetooth**: Supports up to 2 profiles.
-    - **Keymap**: Includes direct profile selection keys (`BT_SEL 0`, `BT_SEL 1`) in the `MGMT` layer.
-
-Both variants include `BT_CLR` for clearing the current Bluetooth bond.
 
 ## Encoders
 
@@ -187,11 +187,14 @@ Used for system tasks and Bluetooth management.
 The BomboPad's Bluetooth management varies depending on the [Build Variant](#build-variants) used:
 
 #### With Display (`bombopad_niceview`)
+
 - **Profiles**: Supports up to **5 Bluetooth profiles**.
-- **Switching Profiles**: Use `BT_NXT` (Next) and `BT_PRV` (Previous) in the `MGMT` layer to cycle through profiles. The active profile is highlighted on the custom status widget.
+- **Switching Profiles**: Use `BT_NXT` (Next) and `BT_PRV` (Previous) in the `MGMT` layer to cycle through profiles. The
+  active profile is highlighted on the custom status widget.
 - **Clearing Bonds**: `BT_CLR` removes the bonding information for the *currently selected* profile.
 
 #### Without Display (`bombopad_nodisplay`)
+
 - **Profiles**: Supports up to **2 Bluetooth profiles**.
 - **Switching Profiles**: Use `BT_SEL 0` or `BT_SEL 1` in the `MGMT` layer for direct profile selection.
 - **Clearing Bonds**: `BT_CLR` removes the bonding information for the *currently selected* profile.
@@ -207,6 +210,14 @@ You can force the macropad to use a specific connection method:
 - `OUT_USB`: Force USB output.
 - `OUT_BLE`: Force Bluetooth output.
 - `OUT_TOG`: Toggle between USB and BLE.
+
+## Future Improvements (To-Do)
+
+The following features and improvements are planned for future updates:
+
+- **BLE Hardening & Security**:
+    - Evaluate the need for `CONFIG_ZMK_BLE_EXPERIMENTAL_CONN=y`.
+    - Document the use of bonding/fixed passkey and its implications.
 
 ## Help & Contributions
 
