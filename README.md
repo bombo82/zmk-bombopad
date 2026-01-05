@@ -14,6 +14,7 @@ The current firmware version supports the following hardware features:
 - **Dual Rotary Encoders**: Support EC11 or EVQWGD001 encoders.
 - **Display Support**: Nice!View.
 - **Microcontroller**: Nice!Nano v2 or other compatible wireless controllers, e.g. SuperMini NRF52840.
+  Note that the shield metadata specifies `requires: [pro_micro]`, which is the standard ZMK mapping for controllers with the Pro Micro footprint, including the Nice!Nano.
 - **Wireless**: Bluetooth LE support via ZMK.
 
 ## Hardware Availability
