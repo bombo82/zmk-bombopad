@@ -20,3 +20,8 @@
 include:
   - board: nice_nano
     shield: nice_view_adapter nice_view bombopad
+    artifact-name: bombopad_niceview
+  - board: nice_nano
+    shield: bombopad
+    cmake-args: -DCONFIG_ZMK_DISPLAY=n -DCONFIG_BT_MAX_CONN=2
+    artifact-name: bombopad_nodisplay

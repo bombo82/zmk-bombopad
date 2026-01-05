@@ -63,7 +63,11 @@
             bindings = <
     &sys_reset              &bootloader             &none                   &trans
     &out OUT_USB            &out OUT_BLE            &out OUT_TOG            &trans
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY)
+    &bt BT_PRV              &bt BT_NXT              &bt BT_CLR              &cycle_layer MGMT NUM
+#else
     &bt BT_SEL 0            &bt BT_SEL 1            &bt BT_CLR              &cycle_layer MGMT NUM
+#endif
             >;
 
             sensor-bindings = <&inc_dec_kp K_VOL_UP K_VOL_DN &inc_dec_kp LG(K_VOL_UP) LG(K_VOL_DN)>;
