@@ -6,6 +6,31 @@
         zmk,matrix_transform = &default_transform;
     };
 
+    /*
+     * Shared behaviors for BomboPad.
+     * These are defined at shield level so they are always available
+     * both to the module keymap and to external ZMK_CONFIG keymaps.
+     */
+    behaviors {
+
+        cycle_layer: behavior_mo_to {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&to>;
+        };
+
+        ht: hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
     default_transform: matrix_transform {
         compatible = "zmk,matrix-transform";
         columns = <4>;

@@ -41,19 +41,51 @@ Both variants include `BT_CLR` for clearing the current Bluetooth bond.
 
 The ZMK keymap is located at `boards/shields/bombopad/bombopad.keymap`.
 
-### Customised Behaviors
+### Shield-provided behaviours
 
-The keymap includes customised behaviours to enhance the macropad's functionality:
+The BomboPad shield exposes a small set of reusable behaviours that are available to:
 
-1. **`cycle_layer`**:
-    - A hold-tap behaviour that combines `mo` (momentary) and `to` (toggle).
-    - **Hold**: Momentarily switches to the `MGMT` layer.
-    - **Tap**: Toggles between layers (e.g., `NUM` to `MGMT` and vice-versa).
-    - Defined with a `tapping-term-ms` of 200ms.
+- the default keymap included in this module; and
+- any external ZMK configuration (e.g., a personal `zmk-config`) that builds with this shield.
 
-2. **`ht` (Hold-Tap)**:
-    - A standard hold-tap behaviour used for multi-function keys (e.g., Command+Key on hold, simple Key on tap).
-    - `tapping-term-ms`: 200ms, `quick-tap-ms`: 200ms.
+They are defined at shield level in the DeviceTree overlay, so their node labels are always visible during the build,
+regardless of which keymap file is used.
+
+Supported behaviours:
+
+1) `cycle_layer`
+
+- Type: hold-tap combining `&mo` (momentary) and `&to` (toggle)
+- Semantics:
+    - Hold: momentarily switches to the specified layer (e.g., `MGMT`).
+    - Tap: toggles to the specified layer (e.g., from `NUM` to `MGMT`).
+- Default parameters: `tapping-term-ms = 200`.
+
+Usage example:
+
+```
+&cycle_layer MGMT MGMT
+```
+
+2) `ht` (generic hold-tap)
+
+- Type: hold-tap for dual-role keys
+- Semantics: tap and hold actions are both `&kp` and are defined via binding cells per usage
+- Default parameters: `tapping-term-ms = 200`, `quick-tap-ms = 200`, `flavor = tap-preferred`.
+
+Usage example (modifier on hold, key on tap):
+
+```
+&ht LG(K_C) K_C
+```
+
+Notes:
+
+- The parameters above are set globally by the shield. If you need different timings or flavour for a specific project,
+  prefer introducing a separate behaviour with a different node label in your own configuration to avoid overriding
+  shared defaults.
+- Since these behaviours are provided by the shield, external `zmk-config` keymaps can reference `&cycle_layer` and
+  `&ht` without redefining them.
 
 ### Layers
 
